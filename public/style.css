@@ -42,6 +42,17 @@ main {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+#filters-container h2 {
+    margin-top: 0;
+}
+
+.filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+}
+
 #category-filters {
     display: flex;
     flex-wrap: wrap;
@@ -69,6 +80,18 @@ main {
     border-color: var(--primary-color);
 }
 
+#speaker-filter-container label {
+    margin-right: 0.5rem;
+    font-weight: bold;
+}
+
+#speaker-select {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
 .schedule-item {
     background: var(--card-bg-color);
     margin-bottom: 1.5rem;
@@ -80,8 +103,7 @@ main {
 }
 
 .schedule-item.hidden {
-    opacity: 0.1;
-    transform: scale(0.95);
+    display: none;
 }
 
 .schedule-item.break, .schedule-item.lunch {

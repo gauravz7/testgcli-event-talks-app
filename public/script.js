@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const scheduleContainer = document.getElementById('schedule-container');
-    const filtersContainer = document.getElementById('category-filters');
+    const categoryFiltersContainer = document.getElementById('category-filters');
+    const speakerSelect = document.getElementById('speaker-select');
+
     let allTalksData = [];
-    let allCategories = new Set();
 
     fetch('/api/schedule')
         .then(response => {
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(scheduleData => {
             allTalksData = scheduleData;
             renderSchedule(scheduleData);
-            extractAndRenderCategories(scheduleData);
+            populateFilters(scheduleData);
         })
         .catch(error => {
             scheduleContainer.innerHTML = `<div class="schedule-item">
@@ -55,52 +56,73 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             
-            // Add data attribute for filtering
-            if(item.category) {
+            if(item.type === 'talk') {
                 itemElement.dataset.categories = item.category.join(',');
+                itemElement.dataset.speakers = item.speakers.join(',');
             }
 
             scheduleContainer.appendChild(itemElement);
         });
     }
 
-    function extractAndRenderCategories(schedule) {
+    function populateFilters(schedule) {
+        const allCategories = new Set();
+        const allSpeakers = new Set();
+
         schedule.forEach(item => {
-            if (item.type === 'talk' && item.category) {
-                item.category.forEach(cat => allCategories.add(cat));
+            if (item.type === 'talk') {
+                item.category?.forEach(cat => allCategories.add(cat));
+                item.speakers?.forEach(speaker => allSpeakers.add(speaker));
             }
         });
 
-        filtersContainer.innerHTML = '<button class="filter-btn active" data-category="all">All</button>';
+        categoryFiltersContainer.innerHTML = '<button class="filter-btn active" data-category="all">All Categories</button>';
         allCategories.forEach(cat => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn';
             btn.dataset.category = cat;
             btn.textContent = cat;
-            filtersContainer.appendChild(btn);
+            categoryFiltersContainer.appendChild(btn);
+        });
+
+        speakerSelect.innerHTML = '<option value="all">All Speakers</option>';
+        allSpeakers.forEach(speaker => {
+            const option = document.createElement('option');
+            option.value = speaker;
+            option.textContent = speaker;
+            speakerSelect.appendChild(option);
         });
     }
 
-    filtersContainer.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            const selectedCategory = e.target.dataset.category;
+    function applyFilters() {
+        const selectedCategory = categoryFiltersContainer.querySelector('.active').dataset.category;
+        const selectedSpeaker = speakerSelect.value;
 
-            // Update active button
-            filtersContainer.querySelector('.active').classList.remove('active');
-            e.target.classList.add('active');
+        const items = scheduleContainer.querySelectorAll('.schedule-item');
+        items.forEach(item => {
+            if (item.classList.contains('talk')) {
+                const itemCategories = item.dataset.categories ? item.dataset.categories.split(',') : [];
+                const itemSpeakers = item.dataset.speakers ? item.dataset.speakers.split(',') : [];
 
-            // Filter schedule items
-            const items = scheduleContainer.querySelectorAll('.schedule-item');
-            items.forEach(item => {
-                if (item.classList.contains('talk')) {
-                    const itemCategories = item.dataset.categories ? item.dataset.categories.split(',') : [];
-                    if (selectedCategory === 'all' || itemCategories.includes(selectedCategory)) {
-                        item.classList.remove('hidden');
-                    } else {
-                        item.classList.add('hidden');
-                    }
+                const categoryMatch = selectedCategory === 'all' || itemCategories.includes(selectedCategory);
+                const speakerMatch = selectedSpeaker === 'all' || itemSpeakers.includes(selectedSpeaker);
+
+                if (categoryMatch && speakerMatch) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
                 }
-            });
+            }
+        });
+    }
+
+    categoryFiltersContainer.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            categoryFiltersContainer.querySelector('.active').classList.remove('active');
+            e.target.classList.add('active');
+            applyFilters();
         }
     });
+
+    speakerSelect.addEventListener('change', applyFilters);
 });
