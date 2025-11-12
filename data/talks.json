@@ -1,0 +1,44 @@
+[
+  {
+    "title": "The Future of JavaScript Frameworks",
+    "speakers": ["Jane Doe"],
+    "category": ["JavaScript", "Frontend"],
+    "duration": 60,
+    "description": "A deep dive into the trends shaping the future of JavaScript frameworks, from reactivity to build tools."
+  },
+  {
+    "title": "Building Scalable APIs with Node.js",
+    "speakers": ["John Smith"],
+    "category": ["Node.js", "Backend"],
+    "duration": 60,
+    "description": "Learn best practices for designing and building scalable and maintainable APIs using Node.js and modern tooling."
+  },
+  {
+    "title": "CSS Grid and Flexbox: A Modern Approach",
+    "speakers": ["Emily White"],
+    "category": ["CSS", "Frontend"],
+    "duration": 60,
+    "description": "Master the art of layout in CSS. This talk covers both Grid and Flexbox, and when to use each."
+  },
+  {
+    "title": "Introduction to Machine Learning with Python",
+    "speakers": ["Michael Green", "Sarah Brown"],
+    "category": ["Python", "AI/ML"],
+    "duration": 60,
+    "description": "An introductory session on the fundamentals of Machine Learning using Python's most popular libraries."
+  },
+  {
+    "title": "DevOps for Developers: A Practical Guide",
+    "speakers": ["Chris Black"],
+    "category": ["DevOps"],
+    "duration": 60,
+    "description": "This talk demystifies DevOps, providing practical steps for developers to improve their deployment pipelines."
+  },
+  {
+    "title": "Web Accessibility: Building for Everyone",
+    "speakers": ["Maria Garcia"],
+    "category": ["Accessibility", "Frontend"],
+    "duration": 60,
+    "description": "Learn the importance of web accessibility (a11y) and how to build inclusive websites that work for all users."
+  }
+]
